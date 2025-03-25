@@ -269,14 +269,10 @@ def operacaoSha256(w, original, a, b, c, d, e, f, g, h, h0, h1, h2, h3, h4, h5, 
 
 # Função principal sha-256
 def sha256(palavra):
-    # Recebo a palavra original e adiciono o '100000000'
-    original = palavra + chr(128)
-    letras_bin = ''
+    # Inicializo as variáveis
     size = ''
-    # Aqui eu vou ver o tamanho da palavra e transformar o tamanho da palavra em binário
-    size = bin(len(original[:-1]))
-    # Adiciono '000' depois do tamanho da palavra em binário, porque sim
-    size = size[2:] + '000'
+    letras_bin = ''
+    letras = ''
 
     # Initial hash value
     h0 = '01101010000010011110011001100111'
@@ -289,18 +285,26 @@ def sha256(palavra):
     h7 = '01011011111000001100110100011001'
 
     # Nesse for eu tranformo cada letras da string para o formato binário
-    for i in range(len(original)):
-        letras = format(ord(original[i]), 'b')
-        # Caso o formato binário da letra tenha menos que 8 caracteres, e adiciono zeros até fechar 8
-        while(len(letras) < 8):
-            letras = '0' + letras
-        # Junto todos os binários das letras em uma string
-        letras_bin = letras_bin +  letras
+    for i in range(len(palavra)):
+        for byte in palavra[i].encode('utf-8'):    
+            letras = format(byte, 'b')
+            # Caso o formato binário da letra tenha menos que 8 caracteres, e adiciono zeros até fechar 8
+            while(len(letras) < 8):
+                letras = '0' + letras
+            # Junto todos os binários das letras em uma string
+            letras_bin = letras_bin + letras
         
     # Passo essa sting para a variável da palavra original
     # Porque eu ja tinha feito toda a lógica usando a palavra original   
     # Daí fiquei com preguiça de substituír para letras_bin em tudo 
+    letras_bin = letras_bin + '10000000'
     original = letras_bin
+
+    # Aqui eu vou ver quantos caracteres na palavra original, retiro os ultimos 8 caracteres q é do '10000000'
+    # divido pro 8, pra saber esse tamanho em decimal, e tranformo esse decimal em binário
+    size = bin(int(len(original[:-8])/8))
+    # Adiciono '000' depois do tamanho da palavra em binário, porque sim
+    size = size[2:] + '000'
 
     # Como o tamanho estava o binário do tamanho mais o '000'
     # Eu vou adicionando zeros até fechar os 64 bits necessários 
