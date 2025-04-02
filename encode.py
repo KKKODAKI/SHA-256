@@ -267,8 +267,15 @@ def operacaoSha256(w, original, a, b, c, d, e, f, g, h, h0, h1, h2, h3, h4, h5, 
     # Retorno uma string com todas juntas
     return (h0 + h1 + h2 + h3 + h4 + h5 + h6 + h7)
 
+# Função para ler arquivo
+def lerArquivo(path):
+    f = open(path, 'r', encoding='utf-8')
+    palavra = f.read()
+    f.close()
+    return palavra
+
 # Função principal sha-256
-def sha256(palavra):
+def sha256(palavra, op):
     # Inicializo as variáveis
     size = ''
     letras_bin = ''
@@ -283,6 +290,11 @@ def sha256(palavra):
     h5 = '10011011000001010110100010001100'
     h6 = '00011111100000111101100110101011'
     h7 = '01011011111000001100110100011001'
+
+    if (op == 'f'):
+        palavra = lerArquivo(palavra)
+    if (op == 's'):
+        palavra = palavra
 
     # Nesse for eu tranformo cada letras da string para o formato binário
     for i in range(len(palavra)):
