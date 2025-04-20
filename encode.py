@@ -267,12 +267,23 @@ def operacaoSha256(w, original, a, b, c, d, e, f, g, h, h0, h1, h2, h3, h4, h5, 
     # Retorno uma string com todas juntas
     return (h0 + h1 + h2 + h3 + h4 + h5 + h6 + h7)
 
-# Função para ler arquivo
 def lerArquivo(path):
-    f = open(path, 'r', encoding='utf-8')
-    palavra = f.read()
+    arquivo_binario = ''
+    f = open('a.jpg', 'rb')
+    bina = f.read()
+    palavra = [b for b in bina]
     f.close()
-    return palavra
+
+    for i in range(len(palavra)):
+        palavra_completa = bin(palavra[i])
+        palavra_completa = palavra_completa[2:]
+
+        while(len(palavra_completa) < 8):
+            palavra_completa = '0' + palavra_completa
+
+        arquivo_binario = arquivo_binario + palavra_completa
+    return arquivo_binario
+
 
 # Função principal sha-256
 def sha256(palavra, op):
@@ -292,19 +303,18 @@ def sha256(palavra, op):
     h7 = '01011011111000001100110100011001'
 
     if (op == 'f'):
-        palavra = lerArquivo(palavra)
-    if (op == 's'):
-        palavra = palavra
+        letras_bin = lerArquivo(palavra)
 
-    # Nesse for eu tranformo cada letras da string para o formato binário
-    for i in range(len(palavra)):
-        for byte in palavra[i].encode('utf-8'):    
-            letras = format(byte, 'b')
-            # Caso o formato binário da letra tenha menos que 8 caracteres, e adiciono zeros até fechar 8
-            while(len(letras) < 8):
-                letras = '0' + letras
-            # Junto todos os binários das letras em uma string
-            letras_bin = letras_bin + letras
+    if (op == 's'):
+        # Nesse for eu tranformo cada letras da string para o formato binário
+        for i in range(len(palavra)):
+            for byte in palavra[i].encode('utf-8'):    
+                letras = format(byte, 'b')
+                # Caso o formato binário da letra tenha menos que 8 caracteres, e adiciono zeros até fechar 8
+                while(len(letras) < 8):
+                    letras = '0' + letras
+                # Junto todos os binários das letras em uma string
+                letras_bin = letras_bin + letras
         
     # Passo essa sting para a variável da palavra original
     # Porque eu ja tinha feito toda a lógica usando a palavra original   
