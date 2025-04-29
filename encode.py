@@ -267,13 +267,18 @@ def operacaoSha256(w, original, a, b, c, d, e, f, g, h, h0, h1, h2, h3, h4, h5, 
     # Retorno uma string com todas juntas
     return (h0 + h1 + h2 + h3 + h4 + h5 + h6 + h7)
 
+# Recebe o caminho de um arquivo
 def lerArquivo(path):
     arquivo_binario = ''
-    f = open('a.jpg', 'rb')
+    # Lê o arquivo em binário
+    f = open(path, 'rb')
     bina = f.read()
     palavra = [b for b in bina]
     f.close()
 
+    # Aqui eu tiro o 0b que tem na frente do formato binário
+    # Caso elas não tenham 8 caracteres eu adiciono zeros na frente
+    # E por fim passo tudo para uma váriavel, para não precisar alterar o meu código
     for i in range(len(palavra)):
         palavra_completa = bin(palavra[i])
         palavra_completa = palavra_completa[2:]
@@ -282,6 +287,7 @@ def lerArquivo(path):
             palavra_completa = '0' + palavra_completa
 
         arquivo_binario = arquivo_binario + palavra_completa
+    # Retorno uma string com todos os binários
     return arquivo_binario
 
 
